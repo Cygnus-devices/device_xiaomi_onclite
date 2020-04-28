@@ -29,6 +29,12 @@
 
 
 #include <stdlib.h>
+#include "vendor_init.h"
+#include "property_service.h"
+#include "android/log.h"
+#include <android-base/properties.h>
+
+#include <string>
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
 
@@ -37,6 +43,26 @@
 #include "vendor_init.h"
 
 using android::init::property_set;
+using std::string;
+
+void property_override(string prop, string value) {
+    auto pi = (prop_info*) __system_property_find(prop.c_str());
+
+    if (pi != nullptr)
+        __system_property_update(pi, value.c_str(), value.size());
+    else
+        __system_property_add(prop.c_str(), prop.size(), value.c_str(), value.size());
+}
+
+void load_props(string device, string model) {
+    string RO_PROP_SOURCES[] = { "", "odm.", "system.", "vendor." };
+
+    for (const string &source : RO_PROP_SOURCES) {
+        property_override(string("ro.product.") + source + string("name"), device);
+        property_override(string("ro.product.") + source + string("device"), device);
+        property_override(string("ro.product.") + source + string("model"), model);
+    }
+}
 
 void property_override(char const prop[], char const value[])
 {
@@ -58,7 +84,19 @@ void property_override_dual(char const system_prop[], char const vendor_prop[],
 
 void vendor_load_properties()
 {
-    // fingerprint
-    property_override("ro.build.description", "onc-user 9 PKQ1.181021.001 V10.3.4.0.PFLMIXM release-keys");
-    property_override_dual("ro.build.fingerprint", "ro.vendor.build.fingerprint", "google/coral/coral:10/QQ2A.200405.005/6254899:user/release-keys");
+    check_device();
+
+    property_set("dalvik.vm.heapstartsize", "16m");
+    property_set("dalvik.vm.heapgrowthlimit", heapgrowthlimit);
+    property_set("dalvik.vm.heapsize", "512m");
+    property_set("dalvik.vm.heaptargetutilization", "0.75");
+    property_set("dalvik.vm.heapminfree", heapminfree);
+    property_set("dalvik.vm.heapmaxfree", "8m");
+
+    string boot_cert = android::base::GetProperty("ro.boot.product.cert", "");
+
+    if (boot_cert == "M1810F6LG" || boot_cert == "M1810F6LH" || boot_cert == "M1810F6LI")
+        load_props("onclite", "Redmi 7");
+    else
+        load_props("onc", "Redmi Y3");
 }
