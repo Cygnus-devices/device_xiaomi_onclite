@@ -229,5 +229,3 @@ SELINUX_IGNORE_NEVERALLOWS := true
 # Inherit from the proprietary version
 -include vendor/xiaomi/onclite/BoardConfigVendor.mk
 
-# Properties
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
