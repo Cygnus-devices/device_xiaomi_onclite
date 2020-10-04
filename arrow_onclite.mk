@@ -13,21 +13,16 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_p.mk)
 $(call inherit-product, device/xiaomi/onclite/device.mk)
 
 # Inherit some coltOS stuff.
-$(call inherit-product, vendor/colt/config/common_full_phone.mk)
+$(call inherit-product, vendor/arrow/config/common.mk)
 
-
-# Bootanimation res
-TARGET_BOOT_ANIMATION_RES := 720x1520
-IS_PHONE := true
+DEVICE_MAINTAINER := TheAcanthite
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := colt_onclite
+PRODUCT_NAME := arrow_onclite
 PRODUCT_DEVICE := onclite
 PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := Redmi 7
 PRODUCT_MANUFACTURER := Xiaomi
-
-BUILD_FINGERPRINT := "google/coral/coral:10/QQ3A.200805.001/6578210:user/release-keys"
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="onc-user 9 PKQ1.181021.001 V10.3.4.0.PFLMIXM release-keys" \
@@ -36,6 +31,3 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
-COLT_BUILD_TYPE := Official
-
-COLT_DEVICE_MAINTAINER := Gagan❤Malvi
