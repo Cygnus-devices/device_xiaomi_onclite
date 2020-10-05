@@ -12,7 +12,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_p.mk)
 # Inherit from onclite device
 $(call inherit-product, device/xiaomi/onclite/device.mk)
 
-# Inherit some coltOS stuff.
+# Inherit some ArrowOS stuff.
 $(call inherit-product, vendor/arrow/config/common.mk)
 
 DEVICE_MAINTAINER := TheAcanthite
